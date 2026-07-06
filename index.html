@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealPilot AI - Autonomous Shopping & Negotiation Dashboard</title>
+  <meta name="description" content="DealPilot AI is an autonomous multi-agent shopping assistant and price negotiator that finds, monitors, and negotiates the best deals using MCP integrations.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js for premium price tracking visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">DP</div>
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <span class="logo-text">DealPilot AI</span>
+          <span class="logo-badge">Autonomous Agent</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-actions">
+      <div class="security-label" style="font-size: 0.75rem; color: var(--accent-green); background: rgba(0, 255, 135, 0.05); padding: 0.25rem 0.6rem; border-radius: 6px; border: 1px solid rgba(0, 255, 135, 0.15); display: flex; align-items: center; gap: 0.3rem;">
+        <i class="fas fa-shield-halved"></i> Vetted & Secure
+      </div>
+      <button class="btn-secondary" onclick="resetUI()"><i class="fas fa-rotate-left"></i> Reset Console</button>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Grid -->
+  <div class="dashboard-grid">
+    
+    <!-- Sidebar: Controls & Security Settings -->
+    <div class="sidebar">
+      
+      <!-- Deal Hunter Console -->
+      <div class="glass-panel" style="box-shadow: none; border: none; background: transparent;">
+        <div class="form-group">
+          <label class="form-label" for="prod-name">Product Search</label>
+          <input type="text" id="prod-name" class="form-input" placeholder="e.g., iPhone 17 Pro">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="prod-loc">Target Location</label>
+          <input type="text" id="prod-loc" class="form-input" placeholder="e.g., Mumbai">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="prod-budget">Budget Target (INR)</label>
+          <input type="number" id="prod-budget" class="form-input" placeholder="e.g., 110000">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="prod-card">Card / Offers</label>
+          <input type="text" id="prod-card" class="form-input" placeholder="e.g., HDFC Credit Card">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="prod-urgency">Watch Window (Days)</label>
+          <select id="prod-urgency" class="form-select">
+            <option value="1">Urgent (1 Day)</option>
+            <option value="4">Express (4 Days)</option>
+            <option value="10" selected>Standard (10 Days)</option>
+            <option value="15">Flexible (15 Days)</option>
+          </select>
+        </div>
+        
+        <button class="btn-primary" id="run-dealpilot">
+          <i class="fas fa-play"></i> Run DealPilot Agent
+        </button>
+        
+        <div style="margin-top: 1rem; border-top: 1px solid var(--panel-border); padding-top: 0.75rem;">
+          <label class="form-label" style="font-size: 0.7rem;">Quick Start Demos</label>
+          <div class="template-grid">
+            <button class="template-card active" data-template="iphone">
+              <div class="template-name">iPhone 17 Pro in Mumbai</div>
+              <div class="template-desc">₹1.1L Budget • HDFC watch • RFQ</div>
+            </button>
+            <button class="template-card" data-template="laptop">
+              <div class="template-name">Gaming Laptop in Delhi</div>
+              <div class="template-desc">₹90k Budget • ICICI watch • local match</div>
+            </button>
+            <button class="template-card" data-template="headphones">
+              <div class="template-name">Sony WH-1000XM5 in BLR</div>
+              <div class="template-desc">₹22k Budget • Old trade-in offer</div>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Security List -->
+      <div style="margin-top: auto; border-top: 1px solid var(--panel-border); padding-top: 0.75rem;">
+        <label class="form-label" style="font-size: 0.7rem; margin-bottom: 0.5rem; display: block;">Active Sandbox</label>
+        <div class="security-list">
+          <div class="security-item-small">
+            <span><i class="fab fa-google" style="color:var(--accent-blue); margin-right:0.25rem;"></i> Gmail Integration</span>
+            <i class="fas fa-toggle-on" style="color:var(--accent-green);"></i>
+          </div>
+          <div class="security-item-small">
+            <span><i class="fas fa-calendar" style="color:var(--accent-pink); margin-right:0.25rem;"></i> Calendar Watch</span>
+            <i class="fas fa-toggle-on" style="color:var(--accent-green);"></i>
+          </div>
+          <div class="security-item-small">
+            <span><i class="fas fa-code-branch" style="color:var(--accent-cyan); margin-right:0.25rem;"></i> Sandboxed API Files</span>
+            <i class="fas fa-toggle-on" style="color:var(--accent-green);"></i>
+          </div>
+        </div>
+        <p style="font-size:0.65rem; color:var(--text-secondary); text-align:center; margin-top:0.5rem; line-height:1.3;">
+          <i class="fas fa-circle-check" style="color:var(--accent-green);"></i> Aadhaar/PAN secure. Sensitive inputs offline.
+        </p>
+      </div>
+      
+    </div>
+    
+    <!-- Main Content Panel -->
+    <div class="main-content">
+      
+      <!-- Compact Horizontal Agent Pipeline -->
+      <div class="pipeline-card">
+        <div class="pipeline-nodes">
+          <div class="pipeline-connector"></div>
+          <div class="pipeline-connector-glow" id="pipeline-progress"></div>
+          
+          <div class="pipeline-node pipeline-req idle" id="agent-req">
+            <div class="pipeline-icon"><i class="fas fa-user-tag"></i></div>
+            <div class="pipeline-name">1. Requirement</div>
+          </div>
+          
+          <div class="pipeline-node pipeline-research idle" id="agent-research">
+            <div class="pipeline-icon"><i class="fas fa-search"></i></div>
+            <div class="pipeline-name">2. Research</div>
+          </div>
+          
+          <div class="pipeline-node pipeline-trust idle" id="agent-trust">
+            <div class="pipeline-icon"><i class="fas fa-shield-check"></i></div>
+            <div class="pipeline-name">3. Vetting</div>
+          </div>
+          
+          <div class="pipeline-node pipeline-strat idle" id="agent-strat">
+            <div class="pipeline-icon"><i class="fas fa-brain"></i></div>
+            <div class="pipeline-name">4. Strategy</div>
+          </div>
+          
+          <div class="pipeline-node pipeline-comm idle" id="agent-comm">
+            <div class="pipeline-icon"><i class="fas fa-comments-dollar"></i></div>
+            <div class="pipeline-name">5. Negotiation</div>
+          </div>
+          
+          <div class="pipeline-node pipeline-monitor idle" id="agent-monitor">
+            <div class="pipeline-icon"><i class="fas fa-eye"></i></div>
+            <div class="pipeline-name">6. Monitoring</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Workspace Grid -->
+      <div class="workspace-grid">
+        
+        <!-- Left Workspace: Outputs & Charts -->
+        <div class="workspace-left">
+          
+          <!-- Summary metrics -->
+          <div class="output-summary-container">
+            <div class="summary-card card-glow-cyan">
+              <span class="summary-label">Target budget</span>
+              <span class="summary-value" id="val-budget">₹110,000</span>
+            </div>
+            <div class="summary-card card-glow-green">
+              <span class="summary-label">Current Best Deal</span>
+              <span class="summary-value" id="val-best-deal">₹111,999</span>
+            </div>
+            <div class="summary-card card-glow-pink">
+              <span class="summary-label">DealPilot status</span>
+              <span class="summary-value" id="val-strat">Scanning Listings...</span>
+            </div>
+          </div>
+          
+          <!-- Vetted Listings table -->
+          <div class="glass-panel listings-panel">
+            <div class="panel-header">
+              <span class="panel-title"><i class="fas fa-tags" style="color: var(--accent-green);"></i> Vetted Seller Listings</span>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+              <div class="deals-table-container">
+                <table class="deals-table">
+                  <thead>
+                    <tr>
+                      <th>Store Name</th>
+                      <th>Offer Price</th>
+                      <th>Deal Strategy notes</th>
+                      <th>Status</th>
+                      <th>Trust Rating</th>
+                    </tr>
+                  </thead>
+                  <tbody id="deals-table-body">
+                    <tr>
+                      <td colspan="5" class="empty-state">
+                        <i class="fas fa-search-dollar"></i>
+                        <span>Ready. Click "Run DealPilot Agent" to scan pricing.</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Chart panel -->
+          <div class="glass-panel chart-panel">
+            <div class="panel-header" style="padding: 0.5rem 1rem;">
+              <span class="panel-title" style="font-size:0.85rem;"><i class="fas fa-chart-line" style="color: var(--accent-pink);"></i> Optimal Buying Window Analytics</span>
+            </div>
+            <div class="panel-body" style="padding: 0.5rem;">
+              <div class="chart-container">
+                <canvas id="price-chart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+        <!-- Right Workspace: Tabs (Emails vs. Log Terminal) -->
+        <div class="workspace-right glass-panel">
+          
+          <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab('email-tab')">
+              <i class="fas fa-envelope-open-text"></i> Email Negotiations (Gmail MCP)
+            </button>
+            <button class="tab-btn" onclick="switchTab('log-tab')">
+              <i class="fas fa-terminal"></i> Agent Logs & Terminal Output
+            </button>
+          </div>
+          
+          <!-- Content 1: Email negotiations -->
+          <div id="email-tab" class="tab-content active">
+            <div class="email-panel-body" id="email-thread-container">
+              <div class="empty-state">
+                <i class="fas fa-envelope-open-text"></i>
+                <span>No active email negotiations yet. Run agent to initiate.</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Content 2: Terminal and intercepts -->
+          <div id="log-tab" class="tab-content">
+            <div class="terminal-container">
+              <!-- Logs -->
+              <div class="terminal-console" id="terminal-console">
+                <div class="empty-state">
+                  <i class="fas fa-terminal"></i>
+                  <span>Terminal Standby...</span>
+                </div>
+              </div>
+              <!-- Broadcast intercepts -->
+              <div class="comms-intercepts">
+                <div class="panel-header" style="padding: 0.4rem 0.75rem; border-top: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border);">
+                  <span class="panel-title" style="font-size:0.75rem; font-weight:700;"><i class="fas fa-comments"></i> Multi-Agent Conversation Intercepts</span>
+                </div>
+                <div class="comms-panel-body" id="comms-hub">
+                  <div class="empty-state" style="padding:0.5rem;">
+                    <span>Offline. Run search to intercept dialogue.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+      <!-- Continuous watch timeline -->
+      <div class="timeline-card">
+        <div class="timeline-control-wrapper">
+          <div class="timeline-slider-container">
+            <span class="form-label" style="margin-bottom:0; font-size:0.75rem; flex-shrink:0;">Continuous Watch Simulator:</span>
+            <input type="range" id="timeline-slider" class="timeline-slider" min="0" max="10" value="0" disabled>
+            <span class="timeline-days-label" id="timeline-label">Day 0</span>
+          </div>
+          <div class="timeline-log" id="timeline-log">
+            <div class="empty-state" style="padding:0; justify-content:center;">
+              <span style="font-size:0.7rem; color:var(--text-muted);">Tracker Offline. Run simulator to watch timeline drops.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  <!-- MCP Server Pills Status bar -->
+  <div class="mcp-bar">
+    <span class="mcp-bar-title">Active MCP Server Nodes:</span>
+    <div class="mcp-nodes">
+      <div class="mcp-node-pill" id="mcp-browser">
+        <div class="mcp-indicator"></div>
+        <span>Browser MCP</span>
+      </div>
+      <div class="mcp-node-pill" id="mcp-gmail">
+        <div class="mcp-indicator"></div>
+        <span>Gmail MCP</span>
+      </div>
+      <div class="mcp-node-pill" id="mcp-calendar">
+        <div class="mcp-indicator"></div>
+        <span>Calendar MCP</span>
+      </div>
+      <div class="mcp-node-pill" id="mcp-fs">
+        <div class="mcp-indicator"></div>
+        <span>Filesystem MCP</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
