@@ -6,6 +6,16 @@ DealPilot AI is an autonomous, privacy-centric concierge agent designed to find,
 
 ---
 
+## 👥 Team Members & Contributions
+* **Shatakshi Tiwari** — **Lead Systems Architect**
+  * [Kaggle Profile](https://www.kaggle.com/shatakshi1718) | [GitHub Profile](https://github.com/Shatakshi0216)
+  * *Responsibilities:* Designed the 6-agent cooperative architecture, built the Python agent backend packages, structured GenAI LLM parsing, and integrated standard Model Context Protocol (MCP) server models.
+* **Shivam Rathod** — **Lead UI Developer**
+  * [Kaggle Profile](https://www.kaggle.com/shivamr021) | [GitHub Profile](https://github.com/shivamr021)
+  * *Responsibilities:* Crafted the responsive dark-mode glassmorphic dashboard, created visual pipeline SVG animations, configured Chart.js components, and structured frontend modules into clean ES6 JS files.
+
+---
+
 ## 📌 Submission Overview
 * **Track:** **Concierge Agents** (or **Freestyle**)
 * **Core Technologies:** Multi-Agent System (ADK), Model Context Protocol (MCP) Servers, Gemini LLMs, Glassmorphic HTML5/CSS3/JS Console.
