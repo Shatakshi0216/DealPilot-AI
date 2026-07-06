@@ -895,10 +895,20 @@ header {
    ========================================================================== */
 
 @media (max-width: 1024px) {
+  .top-navbar {
+    position: static;
+    height: auto;
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
     height: auto;
     overflow-y: visible;
+    margin-top: 0;
   }
 
   .sidebar {
@@ -940,17 +950,6 @@ header {
 }
 
 @media (max-width: 768px) {
-  .top-navbar {
-    padding: 0.75rem 1rem;
-    flex-direction: column;
-    height: auto;
-    gap: 0.5rem;
-    align-items: flex-start;
-  }
-
-  .dashboard-grid {
-    margin-top: 0;
-  }
 
   .output-summary-container {
     grid-template-columns: 1fr;

@@ -293,7 +293,11 @@ export function updateTimelineDay(day) {
     }
   }
   
-  highlightChartPoint(day);
+  try {
+    highlightChartPoint(day);
+  } catch (e) {
+    console.warn("Chart highlighting bypassed:", e);
+  }
 }
 
 export function resetUI() {
@@ -317,7 +321,11 @@ export function resetUI() {
   timelineSlider.disabled = true;
   runButton.disabled = false;
   
-  initChart();
+  try {
+    initChart();
+  } catch (e) {
+    console.warn("Chart initialization bypassed:", e);
+  }
   switchTab('email-tab');
 }
 
@@ -340,6 +348,10 @@ export function resetUIStateOnly() {
   pipelineProgress.style.width = "0%";
   
   timelineSlider.disabled = true;
-  initChart();
+  try {
+    initChart();
+  } catch (e) {
+    console.warn("Chart initialization bypassed:", e);
+  }
   switchTab('log-tab');
 }
