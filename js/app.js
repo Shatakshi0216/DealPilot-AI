@@ -75,7 +75,7 @@ function startSimulation() {
   const prod = formProduct.value.trim() || "iPhone 17 Pro";
   const loc = formLocation.value.trim() || "Mumbai";
   const budgetVal = parseInt(formBudget.value) || 110000;
-  const cardVal = formCard.value.trim() || "HDFC Credit Card";
+  const cardVal = formCard.value.trim() || "None";
   const urgencyVal = parseInt(formUrgency.value) || 10;
 
   generateDynamicData(prod, loc, budgetVal, cardVal, urgencyVal);

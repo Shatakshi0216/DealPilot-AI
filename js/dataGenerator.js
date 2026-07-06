@@ -59,6 +59,8 @@ export function generateDynamicData(product, location, budget, card, urgency) {
   const triggerDay = Math.round(urgency * 0.7);
   const endDay = urgency;
 
+  const hasCard = card && card.toLowerCase() !== "none" && card.trim() !== "";
+
   for (let d = 0; d <= urgency; d++) {
     let reliancePrice = baseReliance;
     let cromaPrice = baseCroma;
@@ -77,13 +79,24 @@ export function generateDynamicData(product, location, budget, card, urgency) {
     }
 
     if (d >= triggerDay) {
-      const cardDiscount = Math.round(budget * 0.05);
-      reliancePrice = reliancePrice - cardDiscount;
-      if (d === triggerDay) {
-        events.push({
-          title: `${card} Offer Applied`,
-          desc: `Extra ₹${cardDiscount.toLocaleString()} instant discount added. Price drops to ₹${reliancePrice.toLocaleString()}`
-        });
+      if (hasCard) {
+        const cardDiscount = Math.round(budget * 0.05);
+        reliancePrice = reliancePrice - cardDiscount;
+        if (d === triggerDay) {
+          events.push({
+            title: `${card} Offer Applied`,
+            desc: `Extra ₹${cardDiscount.toLocaleString()} instant discount added. Price drops to ₹${reliancePrice.toLocaleString()}`
+          });
+        }
+      } else {
+        const promoDiscount = Math.round(budget * 0.03);
+        reliancePrice = reliancePrice - promoDiscount;
+        if (d === triggerDay) {
+          events.push({
+            title: "Store Coupon Applied",
+            desc: `Extra ₹${promoDiscount.toLocaleString()} store coupon applied. Price drops to ₹${reliancePrice.toLocaleString()}`
+          });
+        }
       }
     }
 
@@ -116,6 +129,9 @@ export function generateDynamicData(product, location, budget, card, urgency) {
   const replyPrice = Math.round(budget * 1.02);
   const finalPrice = Math.round(budget * 0.97);
 
+  const cardText = hasCard ? `I have a ${card}.` : "I am looking for the best cash or card outright purchase price.";
+  const emailCardTerms = hasCard ? `using your ${card}` : "for outright purchase";
+
   currentEmails = [
     {
       id: 1,
@@ -125,7 +141,7 @@ export function generateDynamicData(product, location, budget, card, urgency) {
       body: `Hi,
 
 I am looking to buy a ${product} in ${location} within the next ${urgency} days.
-The best online price is ₹${baseReliance.toLocaleString()}. I have a ${card}.
+The best online price is ₹${baseReliance.toLocaleString()}. ${cardText}
 Can you offer a competitive price match or package deal at your retail store?
 
 Regards,
@@ -141,7 +157,7 @@ DealPilot AI`,
       body: `Hello,
 
 We are authorized distributors in ${location}. We can match the online base price of ₹${baseReliance.toLocaleString()} and give you a further retail markdown, offering it at ₹${replyPrice.toLocaleString()} net.
-If you purchase before the weekend using your ${card}, we will include a ${accessoryBundle} at no extra charge, bringing your net effective value to ₹${finalPrice.toLocaleString()}.
+If you purchase before the weekend ${emailCardTerms}, we will include a ${accessoryBundle} at no extra charge, bringing your net effective value to ₹${finalPrice.toLocaleString()}.
 
 Let us know if you want us to hold a unit.
 
