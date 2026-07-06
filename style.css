@@ -895,6 +895,11 @@ header {
    ========================================================================== */
 
 @media (max-width: 1024px) {
+  body {
+    overflow: auto !important;
+    height: auto !important;
+  }
+
   .top-navbar {
     position: static;
     height: auto;

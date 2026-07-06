@@ -84,6 +84,10 @@ function startSimulation() {
   simulationRunning = true;
   runButton.disabled = true;
   
+  if (window.innerWidth <= 1024) {
+    document.querySelector(".main-content").scrollIntoView({ behavior: "smooth" });
+  }
+  
   setTimeout(() => {
     executeRequirementStage();
   }, 500);
